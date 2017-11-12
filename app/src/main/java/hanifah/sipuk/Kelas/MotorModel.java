@@ -13,10 +13,10 @@ public class MotorModel {
     String silinder;
     String jenis;
     String dp;
+    String gambar;
 
 
-
-    public MotorModel(String nama, String ket, String harga, String tahun, String silinder, String jenis,String dp) {
+    public MotorModel(String nama, String ket, String harga, String tahun, String silinder, String jenis, String dp,String gambar) {
         this.nama = nama;
         this.ket = ket;
         this.harga = harga;
@@ -24,7 +24,17 @@ public class MotorModel {
         this.silinder = silinder;
         this.jenis = jenis;
         this.dp = dp;
+        this.gambar = gambar;
     }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
+
 
     public String getDp() {
         return dp;

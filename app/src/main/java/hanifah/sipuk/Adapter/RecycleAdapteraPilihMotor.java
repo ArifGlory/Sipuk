@@ -3,6 +3,7 @@ package hanifah.sipuk.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,9 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +43,12 @@ public class RecycleAdapteraPilihMotor extends RecyclerView.Adapter<RecycleViewH
     public static List<String> list_silinderPilih = new ArrayList();
     public static List<String> list_tahunPilih = new ArrayList();
     public static List<String> list_dpPilih = new ArrayList();
+    public static List<String> list_gambarPilih = new ArrayList();
     String key = "";
     Firebase Sref;
     Bitmap bitmap;
     //ProgressDialog progressBar;
+    private StorageReference storageReference;
     Intent i;
 
     String[] nama ={"Motor 1","Motor 2","Motor 3"};
@@ -70,6 +76,7 @@ public class RecycleAdapteraPilihMotor extends RecyclerView.Adapter<RecycleViewH
                     list_silinderPilih.clear();
                     list_tahunPilih.clear();
                     list_dpPilih.clear();
+                    list_gambarPilih.clear();
 
                     for (DataSnapshot child : dataSnapshot.getChildren()){
                         String nama = (String) child.child("nama").getValue();
@@ -80,6 +87,7 @@ public class RecycleAdapteraPilihMotor extends RecyclerView.Adapter<RecycleViewH
                         String tahun = (String) child.child("tahun").getValue();
                         String harga = (String) child.child("harga").getValue();
                         String dp = (String) child.child("dp").getValue();
+                        String gambar = (String) child.child("gambar").getValue();
 
                         list_namaMotorPilih.add(nama);
                         list_ketMotorPilih.add(ket);
@@ -89,6 +97,7 @@ public class RecycleAdapteraPilihMotor extends RecyclerView.Adapter<RecycleViewH
                         list_hargaPilih.add(harga);
                         list_jenisPilih.add(jenis);
                         list_dpPilih.add(dp);
+                        list_gambarPilih.add(gambar);
                     }
                     PilihMotorFragment.progressBar.setVisibility(View.GONE);
                     Toast.makeText(context.getApplicationContext(),"berhasil ambil data",Toast.LENGTH_SHORT).show();
@@ -165,6 +174,7 @@ public class RecycleAdapteraPilihMotor extends RecyclerView.Adapter<RecycleViewH
             i.putExtra("tahun",list_tahunPilih.get(position).toString());
             i.putExtra("harga",list_hargaPilih.get(position).toString());
             i.putExtra("dp",list_dpPilih.get(position).toString());
+            i.putExtra("gambar",list_gambarPilih.get(position).toString());
             context.startActivity(i);
 
 
@@ -179,6 +189,29 @@ public class RecycleAdapteraPilihMotor extends RecyclerView.Adapter<RecycleViewH
        // return nama.length;
 
 
+    }
+
+    private void showbyte(String nama){
+        /*FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://farmartcorp.appspot.com/file/");*/
+        PilihMotorFragment.progressBar.setVisibility(View.VISIBLE);
+       // RecycleViewHolderPilihMotor vHolder = (RecycleViewHolderPilihMotor) view.getTag();
+        //int position = vHolder.getPosition();
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference islandRef = storageReference.child("file/").child(nama);
+        final long ONE_MEGABYTE = 1024 * 1024;
+
+        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+               // gambar.setImageBitmap(bitmap);
+                PilihMotorFragment.progressBar.setVisibility(View.GONE);
+
+            }
+        });
+        PilihMotorFragment.progressBar.setVisibility(View.GONE);
     }
 
 

@@ -40,6 +40,7 @@ public class RecycleAdapteraKelolaMotor extends RecyclerView.Adapter<RecycleView
     public static List<String> list_silinderPilih = new ArrayList();
     public static List<String> list_tahunPilih = new ArrayList();
     public static List<String> list_dpPilih = new ArrayList();
+    public static List<String> list_gambarPilih = new ArrayList();
     String key = "";
     Firebase Sref;
     Bitmap bitmap;
@@ -71,6 +72,7 @@ public class RecycleAdapteraKelolaMotor extends RecyclerView.Adapter<RecycleView
                     list_silinderPilih.clear();
                     list_tahunPilih.clear();
                     list_dpPilih.clear();
+                    list_gambarPilih.clear();
 
                     for (DataSnapshot child : dataSnapshot.getChildren()){
                         String nama = (String) child.child("nama").getValue();
@@ -81,6 +83,7 @@ public class RecycleAdapteraKelolaMotor extends RecyclerView.Adapter<RecycleView
                         String tahun = (String) child.child("tahun").getValue();
                         String harga = (String) child.child("harga").getValue();
                         String dp = (String) child.child("dp").getValue();
+                        String gambar = (String) child.child("gambar").getValue();
 
                         list_namaMotorPilih.add(nama);
                         list_ketMotorPilih.add(ket);
@@ -90,6 +93,7 @@ public class RecycleAdapteraKelolaMotor extends RecyclerView.Adapter<RecycleView
                         list_hargaPilih.add(harga);
                         list_jenisPilih.add(jenis);
                         list_dpPilih.add(dp);
+                        list_gambarPilih.add(gambar);
                     }
                     PilihMotorFragment.progressBar.setVisibility(View.GONE);
                     Toast.makeText(context.getApplicationContext(),"berhasil ambil data",Toast.LENGTH_SHORT).show();
@@ -166,6 +170,7 @@ public class RecycleAdapteraKelolaMotor extends RecyclerView.Adapter<RecycleView
             i.putExtra("tahun",list_tahunPilih.get(position).toString());
             i.putExtra("harga",list_hargaPilih.get(position).toString());
             i.putExtra("dp",list_dpPilih.get(position).toString());
+            i.putExtra("gambar",list_gambarPilih.get(position).toString());
             context.startActivity(i);
 
         }
